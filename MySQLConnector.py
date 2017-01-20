@@ -39,20 +39,52 @@ class MySQLConnector:
                     values += "'" + str(kwargs[key]) + "'" + ", "
 
             query += colNames[:-2] + ") VALUES (" + values[:-2] + ");"
-            #print(query)  #debug
+            # print(query)  #debug
             with self.connection.cursor() as cursor:
                 # Create a new record
                 cursor.execute(query)
                 lastid = cursor.lastrowid
             # connection is not autocommit by default. So you must commit to save your changes.
             self.connection.commit()
-            #print(lastid) debug
+            # print(lastid) debug
             return lastid
 
         except:
-            print (":( Unexpected error:", sys.exc_info()[0])
+            print(":( Unexpected error:", sys.exc_info()[0])
             raise
 
+    # Update data
+    def updateData(self, tablename, setVaules, whereConditions):
+        try:
+            query = "UPDATE " + tablename + " SET "
+            values = ""
+            whereClause = ""
+            for key in setVaules:
+                values += "`" + key + "`" + " = "
+                if isinstance(setVaules[key], int):
+                    values += str(setVaules[key]) + ", "
+                else:
+                    values += "'" + str(setVaules[key]) + "'" + ", "
+
+            query += values[:-2] + " WHERE "
+
+            for key in whereConditions:
+                whereClause += "`" + key + "`" + " = "
+                if isinstance(whereConditions[key], int):
+                    whereClause += str(whereConditions[key]) + ", "
+                else:
+                    whereClause += "'" + str(whereConditions[key]) + "'" + ", "
+
+            query += whereClause[:-2] + ";"
+
+            #print(query)  #debug
+            with self.connection.cursor() as cursor:
+                cursor.execute(query)
+            # connection is not autocommit by default. So you must commit to save your changes.
+            self.connection.commit()
+        except:
+            print (":( Unexpected error:", sys.exc_info()[0])
+            raise
 
     def printQuery(self):
         try:

@@ -43,9 +43,12 @@ class MySQLConnector:
             with self.connection.cursor() as cursor:
                 # Create a new record
                 cursor.execute(query)
-
+                lastid = cursor.lastrowid
             # connection is not autocommit by default. So you must commit to save your changes.
             self.connection.commit()
+            #print(lastid) debug
+            return lastid
+
         except:
             print (":( Unexpected error:", sys.exc_info()[0])
             raise

@@ -1,0 +1,21 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# An example controller showing a sample home page
+GET     /                           controllers.HomeController.index
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+
+GET     /api/projects                               controllers.ProjectController.getProjectsById(id: Integer ?= -1)
+GET     /api/proyectos                              controllers.ProjectController.getProjectsById(id: Integer ?= -1)
+GET     /api/project/$id<[0-9]+>                    controllers.ProjectController.getProjectsById(id: Integer)
+GET     /api/proyecto/$id<[0-9]+>                   controllers.ProjectController.getProjectsById(id: Integer)
+GET     /api/experiment-groups                      controllers.ExperimentGroupController.getExperimentGroupsById(id: Integer ?= -1)
+GET     /api/experiment-group/$id<[0-9]+>           controllers.ExperimentGroupController.getExperimentGroupsById(id: Integer)
+GET     /api/experiment-group/project/$id<[0-9]+>   controllers.ExperimentGroupController.getExperimentGroupsByProject(id: Integer)
+GET     /api/classification-experiments             controllers.ExperimentGroupController.getExperimentsById(id: Integer ?= -1)
+GET     /api/classification-experiment/$id<[0-9]+>   controllers.ExperimentGroupController.getExperimentsById(id: Integer)           
+GET     /api/classification-experiment/experiment-group/$id<[0-9]+> controllers.ExperimentGroupController.getExperimentsByGroup(id: Integer)
+GET     /api/classification-steps/$experiment<[0-9]+>/$type<[0-9]+> controllers.ExperimentGroupController.getStepsByExperimentAndType(experiment: Integer,type: Integer)

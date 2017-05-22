@@ -28,9 +28,9 @@ getClassificationExperiments <- function(experimentGroupId){
 }
 
 getClassificationExperimentsError <- function(classificationExperiments_dt){
-  classificationExperiments_dt[,c('TrainAccuracyRate','ValidationAccuracyRate','TestAcurracyRate','TrainSize','RegularizationFactor')]
+  classificationExperiments_dt[,c('TrainAccuracyRate','ValidationAccuracyRate','TestAcurracyRate','TrainSize','RegularizationFactor','Complexity')]
 }
 
 getAccuracyRate <- function(classificationExperiments_dt){
-  range(d[,c('TrainAccuracyRate','ValidationAccuracyRate','TestAcurracyRate')])
+  range(classificationExperiments_dt[,c('TrainAccuracyRate','ValidationAccuracyRate','TestAcurracyRate')],na.rm=TRUE)
 }

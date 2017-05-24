@@ -38,7 +38,10 @@ ui <- fluidPage(
       ),
       fluidRow(
         plotOutput("lineChart_errorByModelComplex")
-      )  
+      ),
+      fluidRow(
+        selectInput(inputId = "expSelect", label = "Experiment", choices = "")
+      )
     )
 
 )
@@ -52,15 +55,15 @@ server <- function(input, output, session) {
   lineChart_height <- 300
   lineChart_width <- 400
   
-  expGroup_list = reactive({
+  expGroup_list <- reactive({
     expGroup <- getExperimentGroup(input$projectSelect)
     getExperimentGroup_list(expGroup)
   })
   
-  #classificationExperimentsError_dt = reactive({
-  #  classificationExperiments_dt <- getClassificationExperiments(input$expGroupSelect)
-  #  getClassificationExperimentsError(classificationExperiments_dt)
-  #})
+  classificationExperiments_dt <- reactive({
+      getClassificationExperiments(input$expGroupSelect)
+  })
+  
   
   observe({
       pkproject <- input$projectSelect
@@ -81,57 +84,62 @@ server <- function(input, output, session) {
            
            updateSelectInput(session, "expGroupSelect",
                              choices = expGroup_list()) 
+           
       }  
-  })
+  }, priority = 5)
+ 
+  observe({ 
+        ####### lineChart_errorByTrainSize ##########
+        output$lineChart_errorByTrainSize <- renderPlot({  
+          errorData <- getClassificationExperimentsError(classificationExperiments_dt())
+          
+          trainSize <- errorData[, 'TrainSize']
+          yrange <- range(getAccuracyRate(errorData))
+          xrange <- range(trainSize,na.rm=TRUE)
+          
+          plot(xrange,yrange,type="n",xlab="By Training Size",ylab="Accuracy Rate",cex.lab=1.5)
+          lines(trainSize,errorData[, 'ValidationAccuracyRate'],col="green",lwd=3)
+          lines(trainSize,errorData[, 'TrainAccuracyRate'],col="blue",lwd=3)
+          lines(trainSize,errorData[, 'TestAcurracyRate'],col="red",lwd=3)
+          
+        },height = lineChart_height, width = lineChart_width)
+      
+        ####### lineChart_errorByRegFactor ##########
+        output$lineChart_errorByRegFactor <- renderPlot({  
+          errorData <- getClassificationExperimentsError(classificationExperiments_dt())
+          
+          RegularizationFactor <- errorData[, 'RegularizationFactor']
+          yrange <- range(getAccuracyRate(errorData))
+          xrange <- range(RegularizationFactor,na.rm=TRUE)
+          
+          plot(xrange,yrange,type="n",xlab="By Regularization Factor",ylab="Accuracy Rate",cex.lab=1.5)
+          lines(RegularizationFactor,errorData[, 'ValidationAccuracyRate'],col="green",lwd=3)
+          lines(RegularizationFactor,errorData[, 'TrainAccuracyRate'],col="blue",lwd=3)
+          lines(RegularizationFactor,errorData[, 'TestAcurracyRate'],col="red",lwd=3)
+          
+        },height = lineChart_height, width = lineChart_width)
+        
+        ####### lineChart_errorByModelComplex ##########
+        output$lineChart_errorByModelComplex <- renderPlot({  
+          errorData <- getClassificationExperimentsError(classificationExperiments_dt())
+          
+          modelComplexity <- errorData[, 'Complexity']
+          yrange <- range(getAccuracyRate(errorData))
+          xrange <- range(modelComplexity,na.rm=TRUE)
+          
+          plot(xrange,yrange,type="n",xlab="By Model Complexity",ylab="Accuracy Rate",cex.lab=1.5)
+          lines(modelComplexity,errorData[, 'ValidationAccuracyRate'],col="green",lwd=3)
+          lines(modelComplexity,errorData[, 'TrainAccuracyRate'],col="blue",lwd=3)
+          lines(modelComplexity,errorData[, 'TestAcurracyRate'],col="red",lwd=3)
+          
+        },height = lineChart_height, width = lineChart_width)
+  },priority = 1)
   
-  ####### lineChart_errorByTrainSize ##########
-  output$lineChart_errorByTrainSize <- renderPlot({  
-    classificationExperiments_dt <- getClassificationExperiments(input$expGroupSelect)
-    classificationExperimentsError_dt <- getClassificationExperimentsError(classificationExperiments_dt)
-    
-    trainSize <- classificationExperimentsError_dt[, 'TrainSize']
-    yrange <- range(getAccuracyRate(classificationExperimentsError_dt))
-    xrange <- range(trainSize,na.rm=TRUE)
-    
-    plot(xrange,yrange,type="n",xlab="By Training Size",ylab="Accuracy Rate",cex.lab=1.5)
-    lines(trainSize,classificationExperimentsError_dt[, 'ValidationAccuracyRate'],col="green",lwd=3)
-    lines(trainSize,classificationExperimentsError_dt[, 'TrainAccuracyRate'],col="blue",lwd=3)
-    lines(trainSize,classificationExperimentsError_dt[, 'TestAcurracyRate'],col="red",lwd=3)
-    
-  },height = lineChart_height, width = lineChart_width)
-
-  ####### lineChart_errorByRegFactor ##########
-  output$lineChart_errorByRegFactor <- renderPlot({  
-    classificationExperiments_dt <- getClassificationExperiments(input$expGroupSelect)
-    classificationExperimentsError_dt <- getClassificationExperimentsError(classificationExperiments_dt)
-    
-    RegularizationFactor <- classificationExperimentsError_dt[, 'RegularizationFactor']
-    yrange <- range(getAccuracyRate(classificationExperimentsError_dt))
-    xrange <- range(RegularizationFactor,na.rm=TRUE)
-    
-    plot(xrange,yrange,type="n",xlab="By Regularization Factor",ylab="Accuracy Rate",cex.lab=1.5)
-    lines(RegularizationFactor,classificationExperimentsError_dt[, 'ValidationAccuracyRate'],col="green",lwd=3)
-    lines(RegularizationFactor,classificationExperimentsError_dt[, 'TrainAccuracyRate'],col="blue",lwd=3)
-    lines(RegularizationFactor,classificationExperimentsError_dt[, 'TestAcurracyRate'],col="red",lwd=3)
-    
-  },height = lineChart_height, width = lineChart_width)
+  observe({ 
+    exp_list <- getClassificationExperiment_List(classificationExperiments_dt())
+    updateSelectInput(session, "expSelect",choices = exp_list) 
+  },priority = 2)
   
-  ####### lineChart_errorByModelComplex ##########
-  output$lineChart_errorByModelComplex <- renderPlot({  
-    classificationExperiments_dt <- getClassificationExperiments(input$expGroupSelect)
-    classificationExperimentsError_dt <- getClassificationExperimentsError(classificationExperiments_dt)
-    
-    modelComplexity <- classificationExperimentsError_dt[, 'Complexity']
-    yrange <- range(getAccuracyRate(classificationExperimentsError_dt))
-    xrange <- range(modelComplexity,na.rm=TRUE)
-    
-    plot(xrange,yrange,type="n",xlab="By Model Complexity",ylab="Accuracy Rate",cex.lab=1.5)
-    lines(modelComplexity,classificationExperimentsError_dt[, 'ValidationAccuracyRate'],col="green",lwd=3)
-    lines(modelComplexity,classificationExperimentsError_dt[, 'TrainAccuracyRate'],col="blue",lwd=3)
-    lines(modelComplexity,classificationExperimentsError_dt[, 'TestAcurracyRate'],col="red",lwd=3)
-    
-  },height = lineChart_height, width = lineChart_width)
-
 }
 
 shinyApp(ui = ui, server = server)

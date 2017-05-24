@@ -34,3 +34,12 @@ getClassificationExperimentsError <- function(classificationExperiments_dt){
 getAccuracyRate <- function(classificationExperiments_dt){
   range(classificationExperiments_dt[,c('TrainAccuracyRate','ValidationAccuracyRate','TestAcurracyRate')],na.rm=TRUE)
 }
+
+getClassificationExperiment_List <- function(classificationExperiments_dt){
+  classificationExperiment_List <- classificationExperiments_dt[['PKClassificationExperiment']]
+  classificationExperiment_List
+}
+
+getExperimentSteps <- function(experimentId){
+  ##58##PKClassificationExperiment
+}

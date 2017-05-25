@@ -4,7 +4,7 @@ getAllProjects <- function(){
 
 getAllProjects_list <- function(projects_dt){
   projects_list <- as.list(projects_dt[['body']][['projects']][['PKProject']])
-  names(projects_list) <- unlist(projects_dt[['body']][['projects']]['Name'],use.names = FALSE) 
+  names(projects_list) <- unlist(projects_dt[['body']][['projects']]['Name'],use.names = F) 
   
   projects_list
 }
@@ -17,7 +17,7 @@ getExperimentGroup <- function(projectId){
 
 getExperimentGroup_list <- function(experimentGroup){
   experimentGroup_list <- as.list(experimentGroup[['PKExperimentGroup']])
-  names(experimentGroup_list) <- unlist(experimentGroup['Description'],use.names = FALSE)
+  names(experimentGroup_list) <- unlist(experimentGroup['Description'],use.names = F)
   
   experimentGroup_list
 }
@@ -36,10 +36,26 @@ getAccuracyRate <- function(classificationExperiments_dt){
 }
 
 getClassificationExperiment_List <- function(classificationExperiments_dt){
-  classificationExperiment_List <- classificationExperiments_dt[['PKClassificationExperiment']]
-  classificationExperiment_List
+  if ( !is.null(classificationExperiments_dt)){
+    classificationExperiment_List <- classificationExperiments_dt[['PKClassificationExperiment']]
+    
+    architectureName <- unlist(classificationExperiments_dt['Architecture'],use.names = F)
+    idClassExp <- unlist(classificationExperiments_dt['PKClassificationExperiment'],use.names = F)
+    namesVec <- paste0(idClassExp,": ",architectureName)
+    names(classificationExperiment_List) <- namesVec
+    
+    classificationExperiment_List
+  }
 }
 
 getExperimentSteps <- function(experimentId){
-  ##58##PKClassificationExperiment
+  experimentSteps_dt <- fromJSON(paste0("https://kkuf9fh5w3.execute-api.us-east-1.amazonaws.com/dev/list_classification_experiments/steps/",
+                                        experimentId,
+                                        "/type/1"))
+  experimentSteps_dt[['body']][['classification_steps']]
+}
+
+
+getExperimentsError <- function(experimentSteps_dt){
+  experimentSteps_dt[,c('TrainAccuracyRate','ValidationAccuracyRate','TestAcurracyRate','step_number')]
 }

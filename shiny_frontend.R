@@ -41,6 +41,11 @@ ui <- fluidPage(
       ),
       fluidRow(
         selectInput(inputId = "expSelect", label = "Experiment", choices = "")
+      ),
+      fluidRow(
+        column(width = 5,
+               plotOutput("lineChart_errorByTrainStep")
+        )
       )
     )
 
@@ -61,7 +66,11 @@ server <- function(input, output, session) {
   })
   
   classificationExperiments_dt <- reactive({
-      getClassificationExperiments(input$expGroupSelect)
+    getClassificationExperiments(input$expGroupSelect)
+  })
+  
+  experimentSteps_dt <- reactive({
+    getExperimentSteps(input$expSelect)
   })
   
   
@@ -133,12 +142,30 @@ server <- function(input, output, session) {
           lines(modelComplexity,errorData[, 'TestAcurracyRate'],col="red",lwd=3)
           
         },height = lineChart_height, width = lineChart_width)
-  },priority = 1)
+  },priority = 4)
   
   observe({ 
     exp_list <- getClassificationExperiment_List(classificationExperiments_dt())
     updateSelectInput(session, "expSelect",choices = exp_list) 
-  },priority = 2)
+  },priority = 3)
+  
+  observe({ 
+    ####### lineChart_errorByTrainingStep ##########
+    output$lineChart_errorByTrainStep <- renderPlot({  
+      errorData <- getExperimentsError(experimentSteps_dt())
+      
+      trainSize <- errorData[, 'step_number']
+      yrange <- range(getAccuracyRate(errorData))
+      xrange <- range(trainSize,na.rm=TRUE)
+      
+      plot(xrange,yrange,type="n",xlab="By Training Step Size",ylab="Accuracy Rate",cex.lab=1.5)
+      lines(trainSize,errorData[, 'ValidationAccuracyRate'],col="green",lwd=3)
+      lines(trainSize,errorData[, 'TrainAccuracyRate'],col="blue",lwd=3)
+      lines(trainSize,errorData[, 'TestAcurracyRate'],col="red",lwd=3)
+      
+    },height = lineChart_height, width = lineChart_width)
+    
+  },priority = 1)
   
 }
 

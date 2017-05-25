@@ -103,8 +103,8 @@ server <- function(input, output, session) {
           errorData <- getClassificationExperimentsError(classificationExperiments_dt())
           
           trainSize <- errorData[, 'TrainSize']
-          yrange <- range(getAccuracyRate(errorData))
-          xrange <- range(trainSize,na.rm=TRUE)
+          yrange <- getAccuracyRate(errorData)
+          xrange <- getRange(trainSize)
           
           plot(xrange,yrange,type="n",xlab="By Training Size",ylab="Accuracy Rate",cex.lab=1.5)
           lines(trainSize,errorData[, 'ValidationAccuracyRate'],col="green",lwd=3)
@@ -118,8 +118,8 @@ server <- function(input, output, session) {
           errorData <- getClassificationExperimentsError(classificationExperiments_dt())
           
           RegularizationFactor <- errorData[, 'RegularizationFactor']
-          yrange <- range(getAccuracyRate(errorData))
-          xrange <- range(RegularizationFactor,na.rm=TRUE)
+          yrange <- getAccuracyRate(errorData)
+          xrange <- getRange(RegularizationFactor)
           
           plot(xrange,yrange,type="n",xlab="By Regularization Factor",ylab="Accuracy Rate",cex.lab=1.5)
           lines(RegularizationFactor,errorData[, 'ValidationAccuracyRate'],col="green",lwd=3)
@@ -133,8 +133,8 @@ server <- function(input, output, session) {
           errorData <- getClassificationExperimentsError(classificationExperiments_dt())
           
           modelComplexity <- errorData[, 'Complexity']
-          yrange <- range(getAccuracyRate(errorData))
-          xrange <- range(modelComplexity,na.rm=TRUE)
+          yrange <- getAccuracyRate(errorData)
+          xrange <- getRange(modelComplexity)
           
           plot(xrange,yrange,type="n",xlab="By Model Complexity",ylab="Accuracy Rate",cex.lab=1.5)
           lines(modelComplexity,errorData[, 'ValidationAccuracyRate'],col="green",lwd=3)
@@ -155,10 +155,10 @@ server <- function(input, output, session) {
       errorData <- getExperimentsError(experimentSteps_dt())
       
       trainSize <- errorData[, 'step_number']
-      yrange <- range(getAccuracyRate(errorData))
-      xrange <- range(trainSize,na.rm=TRUE)
+      yrange <- getAccuracyRate(errorData)
+      xrange <- getRange(trainSize)
       
-      plot(xrange,yrange,type="n",xlab="By Training Step Size",ylab="Accuracy Rate",cex.lab=1.5)
+      plot(xrange,yrange,type="n",xlab="By Training Step",ylab="Accuracy Rate",cex.lab=1.5)
       lines(trainSize,errorData[, 'ValidationAccuracyRate'],col="green",lwd=3)
       lines(trainSize,errorData[, 'TrainAccuracyRate'],col="blue",lwd=3)
       lines(trainSize,errorData[, 'TestAcurracyRate'],col="red",lwd=3)

@@ -1,3 +1,4 @@
+#### API #####
 getAllProjects <- function(){
   fromJSON("https://kkuf9fh5w3.execute-api.us-east-1.amazonaws.com/dev/list-projects")
 }
@@ -32,7 +33,10 @@ getClassificationExperimentsError <- function(classificationExperiments_dt){
 }
 
 getAccuracyRate <- function(classificationExperiments_dt){
-  range(classificationExperiments_dt[,c('TrainAccuracyRate','ValidationAccuracyRate','TestAcurracyRate')],na.rm=TRUE)
+  if(!is.null(classificationExperiments_dt)){
+    return (range(classificationExperiments_dt[,c('TrainAccuracyRate','ValidationAccuracyRate','TestAcurracyRate')],na.rm=TRUE))    
+  }
+  range(0)
 }
 
 getClassificationExperiment_List <- function(classificationExperiments_dt){
@@ -57,5 +61,17 @@ getExperimentSteps <- function(experimentId){
 
 
 getExperimentsError <- function(experimentSteps_dt){
-  experimentSteps_dt[,c('TrainAccuracyRate','ValidationAccuracyRate','TestAcurracyRate','step_number')]
+  if(length(experimentSteps_dt) > 0){
+    experimentSteps_dt[,c('TrainAccuracyRate','ValidationAccuracyRate','TestAcurracyRate','step_number')]
+  }  
 }
+
+
+#### OTHER #####
+getRange <- function(x){
+  if(!is.null(x)){
+    return (range(x,na.rm=TRUE))    
+  }
+  range(0)
+}
+  

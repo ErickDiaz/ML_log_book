@@ -1,5 +1,8 @@
 library(shiny)
+library(curl)
 library(jsonlite)
+
+source("backendFunctions.R")
 
 fluidPage(
   titlePanel("ML Log"),
@@ -35,3 +38,5 @@ fluidPage(
   )
   
 )
+
+

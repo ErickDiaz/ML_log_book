@@ -1,5 +1,7 @@
 library(shiny)
+library(curl)
 library(jsonlite)
+
 
 #################################
 ########## SERVER ###############

@@ -75,3 +75,7 @@ getRange <- function(x){
   range(0)
 }
   
+
+##
+projects_dt <- getAllProjects()
+projects_list <- getAllProjects_list(projects_dt)

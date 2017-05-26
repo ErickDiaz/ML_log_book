@@ -17,6 +17,11 @@ fluidPage(
   ### OUTPUTS ###
   mainPanel(
     fluidRow(
+      column(width = 2,checkboxInput("showTrainingData","Training", T)),
+      column(width = 2,checkboxInput("showvalidationData","Cross Validation", T)),
+      column(width = 2,checkboxInput("showTestData","Test ", T))
+    ),
+    fluidRow(
       column(width = 5,
              plotOutput("lineChart_errorByTrainSize")
       ),

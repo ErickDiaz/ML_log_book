@@ -58,9 +58,16 @@ server <- function(input, output, session) {
       xrange <- getRange(trainSize)
       
       plot(xrange,yrange,type="n",xlab="By Training Size",ylab="Accuracy Rate",cex.lab=1.5)
-      lines(trainSize,errorData[, 'ValidationAccuracyRate'],col="green",lwd=3)
-      lines(trainSize,errorData[, 'TrainAccuracyRate'],col="blue",lwd=3)
-      lines(trainSize,errorData[, 'TestAcurracyRate'],col="red",lwd=3)
+      
+      if(input$showvalidationData){
+        lines(trainSize,errorData[, 'ValidationAccuracyRate'],col="green",lwd=3)
+      }
+      if(input$showTrainingData){
+        lines(trainSize,errorData[, 'TrainAccuracyRate'],col="blue",lwd=3) 
+      }
+      if(input$showTestData){
+        lines(trainSize,errorData[, 'TestAcurracyRate'],col="red",lwd=3) 
+      }
       
     },height = lineChart_height, width = lineChart_width)
     
@@ -73,9 +80,15 @@ server <- function(input, output, session) {
       xrange <- getRange(RegularizationFactor)
       
       plot(xrange,yrange,type="n",xlab="By Regularization Factor",ylab="Accuracy Rate",cex.lab=1.5)
-      lines(RegularizationFactor,errorData[, 'ValidationAccuracyRate'],col="green",lwd=3)
-      lines(RegularizationFactor,errorData[, 'TrainAccuracyRate'],col="blue",lwd=3)
-      lines(RegularizationFactor,errorData[, 'TestAcurracyRate'],col="red",lwd=3)
+      if(input$showvalidationData){
+        lines(RegularizationFactor,errorData[, 'ValidationAccuracyRate'],col="green",lwd=3)
+      }
+      if(input$showTrainingData){
+        lines(RegularizationFactor,errorData[, 'TrainAccuracyRate'],col="blue",lwd=3) 
+      }
+      if(input$showTestData){
+        lines(RegularizationFactor,errorData[, 'TestAcurracyRate'],col="red",lwd=3) 
+      }
       
     },height = lineChart_height, width = lineChart_width)
     
@@ -88,9 +101,15 @@ server <- function(input, output, session) {
       xrange <- getRange(modelComplexity)
       
       plot(xrange,yrange,type="n",xlab="By Model Complexity",ylab="Accuracy Rate",cex.lab=1.5)
-      lines(modelComplexity,errorData[, 'ValidationAccuracyRate'],col="green",lwd=3)
-      lines(modelComplexity,errorData[, 'TrainAccuracyRate'],col="blue",lwd=3)
-      lines(modelComplexity,errorData[, 'TestAcurracyRate'],col="red",lwd=3)
+      if(input$showvalidationData){
+        lines(modelComplexity,errorData[, 'ValidationAccuracyRate'],col="green",lwd=3)
+      }
+      if(input$showTrainingData){
+        lines(modelComplexity,errorData[, 'TrainAccuracyRate'],col="blue",lwd=3) 
+      }
+      if(input$showTestData){
+        lines(modelComplexity,errorData[, 'TestAcurracyRate'],col="red",lwd=3) 
+      }
       
     },height = lineChart_height, width = lineChart_width)
   },priority = 4)
@@ -105,14 +124,20 @@ server <- function(input, output, session) {
     output$lineChart_errorByTrainStep <- renderPlot({  
       errorData <- getExperimentsError(experimentSteps_dt())
       
-      trainSize <- errorData[, 'step_number']
+      trainStep <- errorData[, 'step_number']
       yrange <- getAccuracyRate(errorData)
-      xrange <- getRange(trainSize)
+      xrange <- getRange(trainStep)
       
       plot(xrange,yrange,type="n",xlab="By Training Step",ylab="Accuracy Rate",cex.lab=1.5)
-      lines(trainSize,errorData[, 'ValidationAccuracyRate'],col="green",lwd=3)
-      lines(trainSize,errorData[, 'TrainAccuracyRate'],col="blue",lwd=3)
-      lines(trainSize,errorData[, 'TestAcurracyRate'],col="red",lwd=3)
+      if(input$showvalidationData){
+        lines(trainStep,errorData[, 'ValidationAccuracyRate'],col="green",lwd=3)
+      }
+      if(input$showTrainingData){
+        lines(trainStep,errorData[, 'TrainAccuracyRate'],col="blue",lwd=3) 
+      }
+      if(input$showTestData){
+        lines(trainStep,errorData[, 'TestAcurracyRate'],col="red",lwd=3) 
+      }
       
     },height = lineChart_height, width = lineChart_width)
     

@@ -1,7 +1,7 @@
 library(shiny)
 library(curl)
 library(jsonlite)
-
+library(DT)
 
 #################################
 ########## SERVER ###############
@@ -24,6 +24,13 @@ server <- function(input, output, session) {
     getExperimentSteps(input$expSelect)
   })
   
+  observe({
+    data <- getClassificationExperimentsError(classificationExperiments_dt())
+    if(!is.null(data)){
+      output$table_errorByTrainSize <- DT::renderDataTable(data[,c('TrainAccuracyRate','ValidationAccuracyRate','TestAcurracyRate','TrainSize')])
+      output$table_errorByRegFactor <- DT::renderDataTable(data[,c('TrainAccuracyRate','ValidationAccuracyRate','TestAcurracyRate','RegularizationFactor')])
+    }  
+  },priority = 1)
   
   observe({
     pkproject <- input$projectSelect

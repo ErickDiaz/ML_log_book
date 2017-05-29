@@ -1,6 +1,7 @@
 library(shiny)
 library(curl)
 library(jsonlite)
+library(DT)
 
 source("backendFunctions.R")
 
@@ -18,12 +19,18 @@ fluidPage(
   mainPanel(
     tabsetPanel(
       tabPanel("Plot",
-        fluidRow(
-          column(width = 2,checkboxInput("showTrainingData","Training", T)),
-          column(width = 2,checkboxInput("showvalidationData","Cross Validation", T)),
-          column(width = 2,checkboxInput("showTestData","Test ", T)),
-          column(width = 2,checkboxInput("gridLines","Grid Lines ", T))
+        wellPanel(
+          fluidRow(
+            column(width = 2,checkboxInput("showTrainingData","Training", T)),
+            column(width = 2,checkboxInput("showvalidationData","Cross Validation", T)),
+            column(width = 2,checkboxInput("showTestData","Test ", T))
+          )
         ),
+        wellPanel(
+          fluidRow(
+            column(width = 2,checkboxInput("gridLines","Grid Lines ", T))
+          )
+        ),  
         fluidRow(
           column(width = 5,
                  plotOutput("lineChart_errorByTrainSize")
@@ -44,7 +51,18 @@ fluidPage(
           )
         )
       ),## end of Plot tab
-      tabPanel("Tabular data")
+      tabPanel("Tabular data",
+               fluidRow(
+                   column(width = 5,
+                          div(DT::dataTableOutput("table_errorByTrainSize"), style = "font-size: 75%; width: 75%")
+                   )
+               ),   
+               fluidRow(     
+                 column(width = 5,
+                        div(DT::dataTableOutput("table_errorByRegFactor"), style = "font-size: 75%; width: 75%")
+                 )
+               )
+      )## end of Tablular data 
     )## end of tab panel
   )
   

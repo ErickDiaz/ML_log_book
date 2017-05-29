@@ -16,30 +16,35 @@ fluidPage(
   ),
   ### OUTPUTS ###
   mainPanel(
-    fluidRow(
-      column(width = 2,checkboxInput("showTrainingData","Training", T)),
-      column(width = 2,checkboxInput("showvalidationData","Cross Validation", T)),
-      column(width = 2,checkboxInput("showTestData","Test ", T))
-    ),
-    fluidRow(
-      column(width = 5,
-             plotOutput("lineChart_errorByTrainSize")
-      ),
-      column(width = 5,
-             plotOutput("lineChart_errorByRegFactor")
-      )
-    ),
-    fluidRow(
-      plotOutput("lineChart_errorByModelComplex")
-    ),
-    fluidRow(
-      selectInput(inputId = "expSelect", label = "Experiment", choices = "")
-    ),
-    fluidRow(
-      column(width = 5,
-             plotOutput("lineChart_errorByTrainStep")
-      )
-    )
+    tabsetPanel(
+      tabPanel("Plot",
+        fluidRow(
+          column(width = 2,checkboxInput("showTrainingData","Training", T)),
+          column(width = 2,checkboxInput("showvalidationData","Cross Validation", T)),
+          column(width = 2,checkboxInput("showTestData","Test ", T))
+        ),
+        fluidRow(
+          column(width = 5,
+                 plotOutput("lineChart_errorByTrainSize")
+          ),
+          column(width = 5,
+                 plotOutput("lineChart_errorByRegFactor")
+          )
+        ),
+        fluidRow(
+          plotOutput("lineChart_errorByModelComplex")
+        ),
+        fluidRow(
+          selectInput(inputId = "expSelect", label = "Experiment", choices = "")
+        ),
+        fluidRow(
+          column(width = 5,
+                 plotOutput("lineChart_errorByTrainStep")
+          )
+        )
+      ),## end of Plot tab
+      tabPanel("Tabular data")
+    )## end of tab panel
   )
   
 )

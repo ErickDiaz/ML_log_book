@@ -58,6 +58,7 @@ server <- function(input, output, session) {
       xrange <- getRange(trainSize)
       
       plot(xrange,yrange,type="n",xlab="By Training Size",ylab="Accuracy Rate",cex.lab=1.5)
+      abline(h=0, v=0)
       
       if(input$showvalidationData){
         lines(trainSize,errorData[, 'ValidationAccuracyRate'],col="green",lwd=3)
@@ -80,6 +81,8 @@ server <- function(input, output, session) {
       xrange <- getRange(RegularizationFactor)
       
       plot(xrange,yrange,type="n",xlab="By Regularization Factor",ylab="Accuracy Rate",cex.lab=1.5)
+      abline(h=0, v=0)
+      
       if(input$showvalidationData){
         lines(RegularizationFactor,errorData[, 'ValidationAccuracyRate'],col="green",lwd=3)
       }
@@ -101,6 +104,8 @@ server <- function(input, output, session) {
       xrange <- getRange(modelComplexity)
       
       plot(xrange,yrange,type="n",xlab="By Model Complexity",ylab="Accuracy Rate",cex.lab=1.5)
+      abline(h=0, v=0)
+      
       if(input$showvalidationData){
         lines(modelComplexity,errorData[, 'ValidationAccuracyRate'],col="green",lwd=3)
       }
@@ -129,6 +134,8 @@ server <- function(input, output, session) {
       xrange <- getRange(trainStep)
       
       plot(xrange,yrange,type="n",xlab="By Training Step",ylab="Accuracy Rate",cex.lab=1.5)
+      abline(h=0, v=0)
+      
       if(input$showvalidationData){
         lines(trainStep,errorData[, 'ValidationAccuracyRate'],col="green",lwd=3)
       }

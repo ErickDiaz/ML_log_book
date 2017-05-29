@@ -21,7 +21,8 @@ fluidPage(
         fluidRow(
           column(width = 2,checkboxInput("showTrainingData","Training", T)),
           column(width = 2,checkboxInput("showvalidationData","Cross Validation", T)),
-          column(width = 2,checkboxInput("showTestData","Test ", T))
+          column(width = 2,checkboxInput("showTestData","Test ", T)),
+          column(width = 2,checkboxInput("gridLines","Grid Lines ", T))
         ),
         fluidRow(
           column(width = 5,
